@@ -1,0 +1,62 @@
+<div class="bg-white rounded-lg shadow-sm p-6">
+    <!-- Payment Options -->
+    <div class="space-y-4 mb-8">
+        <div class="flex space-x-4">
+            <button data-method="card" class="payment-method-btn active flex-1 p-4 border rounded-lg flex items-center justify-center space-x-2 hover:border-blue-500 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+                <span>Credit Card</span>
+            </button>
+            <button data-method="paypal" class="payment-method-btn flex-1 p-4 border rounded-lg flex items-center justify-center space-x-2 hover:border-blue-500 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.217a.641.641 0 0 1 .633-.542h6.012c2.735 0 4.658.579 5.727 1.72.967 1.03 1.405 2.449 1.304 4.214-.054.943-.207 1.813-.456 2.603-.248.79-.594 1.462-1.036 2.015-.443.553-.97.992-1.58 1.316-.61.324-1.29.568-2.036.733-.746.165-1.577.247-2.49.247h-.63c-.36 0-.71.142-.97.396-.258.255-.42.603-.444.973l-.046.365-.422 2.68-.013.083a.974.974 0 0 1-.96.837z"></path>
+                </svg>
+                <span>PayPal</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Credit Card Form -->
+    <form id="cardForm" class="space-y-4">
+        <div class="space-y-4">
+            <input type="text" placeholder="Card Number" required
+                   class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" placeholder="MM/YY" required
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" placeholder="CVC" required
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <input type="text" placeholder="Name on Card" required
+                   class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="flex items-center mt-4">
+            <input type="checkbox" id="saveCard" class="h-4 w-4 text-blue-500">
+            <label for="saveCard" class="ml-2 text-gray-600">Save card for future purchases</label>
+        </div>
+    </form>
+
+    <!-- PayPal Form -->
+    <div id="paypalForm" class="hidden text-center py-8">
+        <p class="text-gray-600 mb-4">You will be redirected to PayPal to complete your payment</p>
+        <button class="w-full bg-[#0070BA] text-white py-3 rounded-lg hover:bg-[#003087] transition-colors">
+            Continue with PayPal
+        </button>
+    </div>
+
+    <!-- Order Total -->
+    <div class="border-t mt-8 pt-6">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-gray-600">Order Total</span>
+            <span class="text-xl font-bold" id="orderTotal">$0.00</span>
+        </div>
+        
+        <button onclick="cart.processPayment()" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
+            Complete Purchase
+        </button>
+    </div>
+</div> 

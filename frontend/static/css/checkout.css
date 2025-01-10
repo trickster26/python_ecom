@@ -1,0 +1,44 @@
+/* Shipping Options */
+.shipping-option.selected {
+    border-color: #3b82f6;
+    background-color: #f0f7ff;
+}
+
+.shipping-option.selected .shipping-radio {
+    border-color: #3b82f6;
+}
+
+/* Payment Methods */
+.payment-method-btn.active {
+    border-color: #3b82f6;
+    background-color: #f0f7ff;
+}
+
+/* Form Validation */
+input:invalid {
+    border-color: #ef4444;
+}
+
+input:invalid:focus {
+    ring-color: #ef4444;
+}
+
+/* Animation */
+.animate__animated {
+    animation-duration: 0.5s;
+}
+
+.animate__fadeIn {
+    animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

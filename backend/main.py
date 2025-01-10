@@ -119,4 +119,13 @@ async def products_page(request: Request, skip: int = 0, limit: int = 10, db: Se
         "user": user,
         "products": products
     }) 
+
+@app.route('/checkout')
+def checkout():
+    return templates.TemplateResponse('checkout.html') 
+
+@app.route('/cart')
+def cart():
+    return templates.TemplateResponse('cart.html')
+
     
