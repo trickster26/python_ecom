@@ -1,0 +1,160 @@
+<header
+  class="fixed top-0 right-0 left-64 h-16 bg-white border-b border-gray-200 z-20"
+>
+  <div class="h-full px-4 flex items-center justify-between">
+    <!-- Left side -->
+    <div class="flex items-center">
+      <button type="button" class="text-gray-500 hover:text-gray-600 lg:hidden">
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+      <div class="ml-4">
+        <h1 class="text-lg font-medium text-gray-900">
+          {% if request.url.path == '/dashboard' %} Dashboard {% elif
+          request.url.path == '/analytics' %} Analytics {% elif request.url.path
+          == '/users-page' %} Users {% elif request.url.path == '/products-page'
+          %} Products {% else %} Admin Panel {% endif %}
+        </h1>
+      </div>
+    </div>
+
+    <!-- Right side -->
+    <div class="flex items-center">
+      <!-- Search -->
+      <div class="relative mx-4">
+        <input
+          type="search"
+          placeholder="Search..."
+          class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <div
+          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+        >
+          <svg
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cart -->
+      <button type="button" class="p-2 text-gray-500 hover:text-gray-600" onclick="openCartModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+          </svg>
+      </button>
+
+      <!-- Notifications -->
+      <button type="button" class="p-2 text-gray-500 hover:text-gray-600">
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+          ></path>
+        </svg>
+      </button>
+
+      <!-- Profile dropdown -->
+      <div class="ml-4 relative">
+        <button type="button" class="flex items-center">
+          <img
+            class="h-8 w-8 rounded-full"
+            src="https://ui-avatars.com/api/?name={{ user.name }}&background=random"
+            alt="{{ user.name }}"
+          />
+          <span class="ml-2 text-sm font-medium text-gray-700"
+            >{{ user.name }}</span
+          >
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="cart-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-10">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 class="text-lg font-bold mb-4">Shopping Cart</h2>
+        <ul id="cart-items" class="mb-4"></ul>
+        <div class="flex justify-between items-center">
+            <span class="text-xl font-bold" id="total-price">Total: $0.00</span>
+            <button type="button" onclick="closeCartModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Open Cart Modal
+    function openCartModal() {
+        cartModal.classList.remove("hidden");
+        renderCart();
+    }
+
+    // Close Cart Modal
+    function closeCartModal() {
+        cartModal.classList.add("hidden");
+    }
+
+    // Render Cart
+    async function renderCart() {
+        const response = await fetch("/api/cart");
+        cart = await response.json();
+
+        cartItemsElement.innerHTML = "";
+        let total = 0;
+
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+            const cartItem = document.createElement("li");
+            cartItem.classList.add("flex", "justify-between", "mb-2");
+            cartItem.innerHTML = `
+                <span>${item.name} (${item.quantity})</span>
+                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                <button onclick="removeFromCart(${item.product_id})" class="text-red-500">Remove</button>
+            `;
+            cartItemsElement.appendChild(cartItem);
+        });
+
+        totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    // Remove from Cart
+    async function removeFromCart(productId) {
+        const response = await fetch(`/api/cart/${productId}`, { method: "DELETE" });
+        if (response.ok) {
+            alert("Item removed from cart");
+            renderCart();
+        } else {
+            alert("Error removing item from cart");
+        }
+    }
+
+</script>
